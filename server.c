@@ -108,7 +108,7 @@ void send_merged_packet(int sock){
 	free(p);
 	ptr += n;
 	
-	p = encode_packet("abcde.abcde.abcde");
+	p = encode_packet("abcdefghij0123456789");
 	n = strlen(p);
 	strcpy(ptr, p);
 	free(p);

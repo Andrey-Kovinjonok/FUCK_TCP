@@ -38,6 +38,7 @@ make
 test
 Hello
 World!
+abcdefghij0123456789
 ```
 
 那么说明你写的代码可以正常工作。请把你的client代码以issue形式发出来，不限语言，PHP，Python, 闹得js，Java 等等都可以。

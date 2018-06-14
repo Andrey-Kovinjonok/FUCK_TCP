@@ -46,10 +46,9 @@ int main(int argc, char **argv){
 			}
 			n ++;
 			
-			if(n == 1){
-				printf("< %s\n", msg);
-			}else{
-				printf("< %s [Merged Packet]\n", msg);
+			printf("< %s\n", msg);
+			if(n > 1){
+				printf("    [Merged Packet]\n");
 			}
 			free(msg);
 		}

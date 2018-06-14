@@ -5,10 +5,12 @@
  * @link: http://www.ideawu.net/
  *****************************************************/
 #include "inc.h"
+	 
+#define SLEEP_US 200*1000
 
 void send_partial_packet(int sock);
 void send_merged_packet(int sock);
-void send_packets(int sock);
+void send_packet(int sock, const char *msg);
 
 int main(int argc, char **argv){
 	if(argc <  2){
@@ -41,41 +43,26 @@ int main(int argc, char **argv){
 		if(test){
 			send_partial_packet(sock);
 			send_merged_packet(sock);
+			send_packet(sock, "abcdefghij0123456789");
 		}else{
-			send_packets(sock);
+			send_packet(sock, "test");
+			send_packet(sock, "Hello");
+			send_packet(sock, "World!");
+			send_packet(sock, "abcdefghij0123456789");
 		}
 		close(sock);
 		printf("data sent\n");
 	}
 }
 
-void send_packets(int sock){
+void send_packet(int sock, const char *msg){
 	char *p;
 	int n;
-
-	p = encode_packet("test");
+	p = encode_packet(msg);
 	n = strlen(p);
 	write(sock, p, n);
 	free(p);
-	usleep(10 * 1000);
-
-	p = encode_packet("Hello");
-	n = strlen(p);
-	write(sock, p, n);
-	free(p);
-	usleep(10 * 1000);
-
-	p = encode_packet("World!");
-	n = strlen(p);
-	write(sock, p, n);
-	free(p);
-	usleep(10 * 1000);
-
-	p = encode_packet("abcde.abcde.abcde");
-	n = strlen(p);
-	write(sock, p, n);
-	free(p);
-	usleep(10 * 1000);
+	usleep(SLEEP_US);
 }
 
 void send_partial_packet(int sock){
@@ -83,7 +70,7 @@ void send_partial_packet(int sock){
 	int n = strlen(p);
 	for(int i=0; i<n; i++){
 		write(sock, p+i, 1);
-		usleep(20 * 1000);
+		usleep(SLEEP_US);
 	}
 	free(p);
 }
@@ -108,12 +95,7 @@ void send_merged_packet(int sock){
 	free(p);
 	ptr += n;
 	
-	p = encode_packet("abcdefghij0123456789");
-	n = strlen(p);
-	strcpy(ptr, p);
-	free(p);
-	ptr += n;
-	
 	write(sock, buf, strlen(buf));
+	usleep(SLEEP_US);
 }
 

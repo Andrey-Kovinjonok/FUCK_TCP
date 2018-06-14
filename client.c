@@ -1,5 +1,5 @@
 /*****************************************************
- * The TCP socket client that receive simulate Partial Packet
+ * A TCP socket client that receive Partial Packet
  * and Merged Packets from TCP connection.
  * @author: ideawu
  * @link: http://www.ideawu.net/

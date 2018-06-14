@@ -70,6 +70,12 @@ void send_packets(int sock){
 	write(sock, p, n);
 	free(p);
 	usleep(10 * 1000);
+
+	p = encode_packet("abcde.abcde.abcde");
+	n = strlen(p);
+	write(sock, p, n);
+	free(p);
+	usleep(10 * 1000);
 }
 
 void send_partial_packet(int sock){
@@ -97,6 +103,12 @@ void send_merged_packet(int sock){
 	ptr += n;
 	
 	p = encode_packet("World!");
+	n = strlen(p);
+	strcpy(ptr, p);
+	free(p);
+	ptr += n;
+	
+	p = encode_packet("abcde.abcde.abcde");
 	n = strlen(p);
 	strcpy(ptr, p);
 	free(p);

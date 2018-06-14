@@ -1,3 +1,6 @@
+#ifndef BUFFER_H_
+#define BUFFER_H_
+
 #define BUFFER_SIZE 1024
 
 struct Buffer{
@@ -27,3 +30,5 @@ int buffer_del(struct Buffer *buf, int len){
 	buf->size -= len;
 	return len;
 }
+
+#endif

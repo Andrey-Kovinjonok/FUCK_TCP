@@ -5,9 +5,6 @@
  * @link: http://www.ideawu.net/
  *****************************************************/
 #include "inc.h"
-#include "buffer.h"
-
-char* parse(struct Buffer *buf);
 
 int main(int argc, char **argv){
 	if(argc <= 2){
@@ -29,6 +26,7 @@ int main(int argc, char **argv){
 	buffer_init(&buf);
 	
 	while(1){
+		// 可以优化成直接网络读到buf中，不需要tmp
 		char tmp[128];
 		int len = read(sock, tmp, sizeof(tmp));
 		if(len <= 0){
@@ -42,7 +40,7 @@ int main(int argc, char **argv){
 		
 		int n = 0;
 		while(1){
-			char *msg = parse(&buf);
+			char *msg = parse_packet(&buf);
 			if(!msg){
 				break;
 			}
@@ -60,43 +58,4 @@ int main(int argc, char **argv){
 	return 0;
 }
 
-char* parse(struct Buffer *buf){
-	if(buf->size == 0){
-		return NULL;
-	}
-	int head_len;
-	int body_len;
-
-	{
-		char *body = (char *)memchr(buf->data, '|', buf->size);
-		if(body == NULL){
-			printf("[Partial Packet] header not ready, buffer %d\n", buf->size);
-			return NULL;
-		}
-		body ++;
-		head_len = body - buf->data;
-	}
-
-	{
-		char header[20];
-		memcpy(header, buf->data, head_len - 1); // no '|'
-		header[head_len - 1] = '\0';
-		body_len = atoi(header);
-	}
-
-	if(buf->size < head_len + body_len){
-		printf("[Partial Packet] body not ready, buffer %d\n", buf->size);
-		return NULL;
-	}
-	
-	char *body = malloc(body_len + 1);
-	if(body_len > 0){
-		memcpy(body, buf->data + head_len, body_len);
-	}
-	body[body_len] = '\0';
-	
-	buffer_del(buf, head_len + body_len);
-	
-	return body;
-}
 

@@ -24,3 +24,8 @@ while(1){
     }
 }
 ```
+
+You can improve the code by:
+
+* read data into buffer directly, not tmp
+* increment parsing
